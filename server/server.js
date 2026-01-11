@@ -40,6 +40,12 @@ if (process.env.NODE_ENV === 'production') {
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
   });
+} else {
+  // In development, log API requests
+  app.use('/api', (req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+    next();
+  });
 }
 
 // Error handling middleware (must be last)

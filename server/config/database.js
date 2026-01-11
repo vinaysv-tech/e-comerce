@@ -1,27 +1,42 @@
 const { Sequelize } = require('sequelize');
 const path = require('path');
 
-// SQLite database file path
-const dbPath = path.join(__dirname, '../../novacart.sqlite');
+// Use environment variable for database URL, fallback to SQLite for local dev
+const DATABASE_URL = process.env.DATABASE_URL || '';
 
-// Use environment variable for database path, fallback to default
-const DB_PATH = process.env.DB_PATH || dbPath;
+let sequelize;
 
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: DB_PATH,
-  logging: false, // Set to console.log to see SQL queries
-  define: {
-    timestamps: true,
-    underscored: false,
-    // Disable foreign key constraints in SQLite to avoid issues during sync
-    foreignKeyConstraints: false
-  },
-  dialectOptions: {
-    // Disable foreign keys at SQLite level
-    foreignKeys: false
-  }
-});
+if (DATABASE_URL) {
+  // Production: Use PostgreSQL or other database
+  sequelize = new Sequelize(DATABASE_URL, {
+    dialect: process.env.DB_DIALECT || 'postgres',
+    protocol: process.env.DB_PROTOCOL || 'postgres',
+    dialectOptions: {
+      ssl: process.env.DB_SSL ? { require: true, rejectUnauthorized: false } : false,
+    },
+    logging: false,
+  });
+} else {
+  // Development: Use SQLite
+  const dbPath = path.join(__dirname, '../../novacart.sqlite');
+  const DB_PATH = process.env.DB_PATH || dbPath;
+  
+  sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: DB_PATH,
+    logging: false, // Set to console.log to see SQL queries
+    define: {
+      timestamps: true,
+      underscored: false,
+      // Disable foreign key constraints in SQLite to avoid issues during sync
+      foreignKeyConstraints: false
+    },
+    dialectOptions: {
+      // Disable foreign keys at SQLite level
+      foreignKeys: false
+    }
+  });
+}
 
 const connectDB = async () => {
   try {
