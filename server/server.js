@@ -7,7 +7,7 @@ const { errorHandler, notFound } = require('./middleware/errorMiddleware');
 
 const app = express();
 
-// Connect to MongoDB
+// Connect to database
 connectDB();
 
 // Middleware

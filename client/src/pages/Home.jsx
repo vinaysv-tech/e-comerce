@@ -45,12 +45,8 @@ function Home() {
           <div className="no-products">
             <h3>No products available</h3>
             <p>The database is not connected or no products have been added yet.</p>
-            <p>To add products:</p>
-            <ol style={{ textAlign: 'left', display: 'inline-block' }}>
-              <li>Install and start MongoDB</li>
-              <li>Run: <code>npm run seed</code></li>
-              <li>Refresh this page</li>
-            </ol>
+            <p>Products will be loaded automatically from the database.</p>
+            <p>If you just deployed this application, the database might still be initializing.</p>
           </div>
         )}
       </div>
