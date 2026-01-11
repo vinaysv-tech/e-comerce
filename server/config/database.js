@@ -4,9 +4,12 @@ const path = require('path');
 // SQLite database file path
 const dbPath = path.join(__dirname, '../../novacart.sqlite');
 
+// Use environment variable for database path, fallback to default
+const DB_PATH = process.env.DB_PATH || dbPath;
+
 const sequelize = new Sequelize({
   dialect: 'sqlite',
-  storage: dbPath,
+  storage: DB_PATH,
   logging: false, // Set to console.log to see SQL queries
   define: {
     timestamps: true,
@@ -24,7 +27,7 @@ const connectDB = async () => {
   try {
     await sequelize.authenticate();
     console.log('✅ SQLite database connected successfully');
-    console.log(`📁 Database location: ${dbPath}`);
+    console.log(`📁 Database location: ${DB_PATH}`);
     
     // Sync all models with database
     await sequelize.sync({ alter: true });

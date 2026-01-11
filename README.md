@@ -1,156 +1,191 @@
-# Nova Cart - Full Stack E-commerce Application
+# NovaCart - Modern E-Commerce Platform
 
-A modern e-commerce website with dark theme built using React, Node.js, and Express.
+A full-stack e-commerce platform with advanced features including user authentication, order management, and responsive UI.
 
-## 🛠️ Features
+## ✨ Features
 
-- Dark theme UI/UX design
-- Product browsing and search functionality
-- Shopping cart management
-- User authentication and authorization
-- Order management system
-- Responsive design for all devices
-- Email notifications using EmailJS
+- **User Authentication**: Secure JWT-based registration and login
+- **Role-Based Access**: Admin and user permissions
+- **Product Management**: Browse, search, and filter products
+- **Shopping Cart**: Full cart functionality with persistence
+- **Order Processing**: Complete order management system
+- **Admin Dashboard**: Product and order management interface
+- **Responsive Design**: Mobile-first approach
+- **Email Notifications**: Order confirmations and admin alerts
 
-## 📋 Tech Stack
+## 🛠️ Tech Stack
 
-### Frontend
+**Frontend:**
 - React 19+
 - Redux Toolkit
-- React Router
+- React Router v6
 - Axios
+- CSS Modules
 
-### Backend
+**Backend:**
 - Node.js
 - Express.js
-- SQLite database
-- JWT authentication
-- Bcrypt password hashing
+- SQLite (via Sequelize ORM)
+- JWT Authentication
+- Bcrypt for password hashing
 
-### Other Tools
-- EmailJS for sending emails
-- Concurrently for running client and server together
+**Development:**
+- Concurrently
+- Nodemon
+- EmailJS
 
-## 🚀 Quick Start
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- npm or yarn
+- Node.js (v16 or higher)
+- npm
 
-### Installation
+### Setup Instructions
 
-1. Clone the repository:
+1. **Clone the repository**
    ```bash
-   git clone https://github.com/vinaysv-tech/e-comerce.git
-   cd e-comerce
+   git clone <repository-url>
+   cd e-commerce-platform
    ```
 
-2. Install server dependencies:
+2. **Install server dependencies**
    ```bash
    npm install
    ```
 
-3. Install client dependencies:
+3. **Install client dependencies**
    ```bash
-   cd client
-   npm install
+   cd client && npm install
    cd ..
    ```
 
-4. Create environment file:
+4. **Set up environment variables**
    ```bash
    cp .env.example .env
    ```
-   
-   Then update the values in `.env` file according to your setup.
+   Update `.env` with your specific values
 
-### Running the Application
+5. **Seed the database**
+   ```bash
+   npm run seed
+   ```
 
-#### Development Mode
-```bash
-npm run dev
+6. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+## 🔧 Environment Variables
+
+Create a `.env` file in the root directory with these variables:
+
+```env
+PORT=5000
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+NODE_ENV=development
+REACT_APP_API_URL=http://localhost:5000/api
+REACT_APP_EMAILJS_SERVICE_ID=your-emailjs-service-id
+REACT_APP_EMAILJS_TEMPLATE_ID=your-emailjs-template-id
+REACT_APP_EMAILJS_PUBLIC_KEY=your-emailjs-public-key
 ```
-This will start both the client and server concurrently.
 
-#### Individual Services
-- Start server only: `npm run server`
-- Start client only: `npm run client`
-
-#### Seeding the Database
-```bash
-npm run seed
-```
-This will populate the database with sample products.
-
-## 🏗️ Project Structure
+## 📁 Project Structure
 
 ```
 .
-├── client/                 # React frontend application
+├── client/                 # React frontend
 │   ├── public/
 │   ├── src/
 │   │   ├── app/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   └── slices/
+│   │   ├── components/       # Reusable UI components
+│   │   ├── pages/           # Page components
+│   │   ├── services/        # API and utility services
+│   │   ├── slices/          # Redux slices
+│   │   └── styles/          # Global styles
 │   └── package.json
-├── server/                 # Node.js backend application
-│   ├── config/
-│   ├── controllers/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── utils/
-│   ├── seed.js
-│   └── server.js
+├── server/                 # Express backend
+│   ├── config/             # Database configuration
+│   ├── controllers/        # Business logic
+│   ├── middleware/         # Authentication and error handling
+│   ├── models/             # Database models
+│   ├── routes/             # API routes
+│   ├── utils/              # Utility functions
+│   ├── seed.js             # Database seeding script
+│   └── server.js           # Main server file
 ├── .env.example           # Environment variables template
-├── .gitignore
+├── .env                   # Local environment variables
 ├── package.json           # Root package file
 └── README.md
 ```
 
-## 🔐 Environment Variables
-
-Create a `.env` file in the root directory with the following:
-
-```env
-PORT=5000
-JWT_SECRET=your_jwt_secret_here
-EMAILJS_SERVICE_ID=your_emailjs_service_id
-EMAILJS_TEMPLATE_ID=your_emailjs_template_id
-EMAILJS_PUBLIC_KEY=your_emailjs_public_key
-```
-
-## 📡 API Endpoints
+## 🌐 API Endpoints
 
 ### Authentication
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Login a user
-- `GET /api/auth/profile` - Get user profile (requires authentication)
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `GET /api/auth/profile` - Get authenticated user profile
 
 ### Products
 - `GET /api/products` - Get all products
 - `GET /api/products/:id` - Get product by ID
-- `POST /api/products` - Create a new product (admin only)
-- `PUT /api/products/:id` - Update a product (admin only)
-- `DELETE /api/products/:id` - Delete a product (admin only)
+- `POST /api/products` - Create product (admin only)
+- `PUT /api/products/:id` - Update product (admin only)
+- `DELETE /api/products/:id` - Delete product (admin only)
 
 ### Orders
-- `GET /api/orders` - Get all orders (user or admin)
-- `POST /api/orders` - Create a new order
-- `GET /api/orders/:id` - Get order by ID
-- `PUT /api/orders/:id` - Update order status (admin only)
+- `POST /api/orders` - Create new order
+- `GET /api/orders/myorders` - Get user's orders
+- `GET /api/orders` - Get all orders (admin only)
+- `PUT /api/orders/:id/status` - Update order status (admin only)
+
+## 🧪 Available Scripts
+
+In the project root directory:
+
+- `npm run dev` - Start both client and server in development mode
+- `npm run server` - Start only the server
+- `npm run client` - Start only the client
+- `npm run seed` - Seed the database with sample data
+
+In the client directory:
+
+- `npm start` - Start development server
+- `npm run build` - Build for production
+
+## 👤 Default Credentials
+
+After seeding the database:
+
+- **Admin Account**: admin@novacart.com / admin123
+- **User Account**: user@test.com / user123
+
+## 🖼️ Screenshots
+
+_Coming soon - Screenshots of the application interface_
+
+## 🚀 Deployment
+
+For production deployment:
+
+1. Set `NODE_ENV=production` in your environment
+2. Build the client: `cd client && npm run build`
+3. Deploy the server with the built client files
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+3. Make your changes
+4. Add tests if applicable
+5. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 💬 Support
+
+For support, please contact the development team or raise an issue in the GitHub repository.

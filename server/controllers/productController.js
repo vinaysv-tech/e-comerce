@@ -56,7 +56,16 @@ const createProduct = async (req, res) => {
 
     // Validation
     if (!name || !description || !price || !image || !category) {
-      return res.status(400).json({ message: 'Please provide all required fields' });
+      return res.status(400).json({ 
+        message: 'Please provide all required fields',
+        errors: [
+          ...(name ? [] : [{ field: 'name', message: 'Name is required' }]),
+          ...(description ? [] : [{ field: 'description', message: 'Description is required' }]),
+          ...(price ? [] : [{ field: 'price', message: 'Price is required' }]),
+          ...(image ? [] : [{ field: 'image', message: 'Image is required' }]),
+          ...(category ? [] : [{ field: 'category', message: 'Category is required' }])
+        ]
+      });
     }
 
     const product = await Product.create({

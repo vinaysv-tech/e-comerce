@@ -19,11 +19,21 @@ const register = async (req, res) => {
 
     // Validation
     if (!name || !email || !password) {
-      return res.status(400).json({ message: 'Please provide all fields' });
+      return res.status(400).json({ 
+        message: 'Please provide all fields',
+        errors: [
+          ...(name ? [] : [{ field: 'name', message: 'Name is required' }]),
+          ...(email ? [] : [{ field: 'email', message: 'Email is required' }]),
+          ...(password ? [] : [{ field: 'password', message: 'Password is required' }])
+        ]
+      });
     }
 
     if (password.length < 6) {
-      return res.status(400).json({ message: 'Password must be at least 6 characters' });
+      return res.status(400).json({ 
+        message: 'Password must be at least 6 characters',
+        errors: [{ field: 'password', message: 'Password must be at least 6 characters' }]
+      });
     }
 
     // Check if user already exists
@@ -64,7 +74,13 @@ const login = async (req, res) => {
 
     // Validation
     if (!email || !password) {
-      return res.status(400).json({ message: 'Please provide email and password' });
+      return res.status(400).json({ 
+        message: 'Please provide email and password',
+        errors: [
+          ...(email ? [] : [{ field: 'email', message: 'Email is required' }]),
+          ...(password ? [] : [{ field: 'password', message: 'Password is required' }])
+        ]
+      });
     }
 
     // Check user exists

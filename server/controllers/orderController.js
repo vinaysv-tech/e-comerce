@@ -17,11 +17,20 @@ const createOrder = async (req, res) => {
     const { items, shippingAddress, paymentMethod } = req.body;
 
     if (!items || items.length === 0) {
-      return res.status(400).json({ message: 'No order items' });
+      return res.status(400).json({ 
+        message: 'No order items',
+        errors: [{ field: 'items', message: 'At least one item is required' }]
+      });
     }
 
     if (!shippingAddress || !paymentMethod) {
-      return res.status(400).json({ message: 'Please provide shipping address and payment method' });
+      return res.status(400).json({ 
+        message: 'Please provide shipping address and payment method',
+        errors: [
+          ...(shippingAddress ? [] : [{ field: 'shippingAddress', message: 'Shipping address is required' }]),
+          ...(paymentMethod ? [] : [{ field: 'paymentMethod', message: 'Payment method is required' }])
+        ]
+      });
     }
 
     // Calculate total
@@ -133,6 +142,24 @@ const getAllOrders = async (req, res) => {
 const updateOrderStatus = async (req, res) => {
   try {
     const { orderStatus, paymentStatus } = req.body;
+
+    // Validate status values
+    const validOrderStatuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+    const validPaymentStatuses = ['pending', 'paid', 'failed', 'refunded'];
+
+    if (orderStatus && !validOrderStatuses.includes(orderStatus)) {
+      return res.status(400).json({ 
+        message: 'Invalid order status',
+        errors: [{ field: 'orderStatus', message: 'Invalid order status value' }]
+      });
+    }
+
+    if (paymentStatus && !validPaymentStatuses.includes(paymentStatus)) {
+      return res.status(400).json({ 
+        message: 'Invalid payment status',
+        errors: [{ field: 'paymentStatus', message: 'Invalid payment status value' }]
+      });
+    }
 
     const order = await Order.findByPk(req.params.id);
 
